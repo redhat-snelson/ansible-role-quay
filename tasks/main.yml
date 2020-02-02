@@ -1,0 +1,27 @@
+---
+# tasks file for quay-ansible
+- name: Login to Container Repository
+  import_tasks: tasks/login-registry.yml
+
+- name: Deploy quay config container
+  include_tasks: tasks/config-mode.yml
+  when: QUAY_CONFIG is defined and QUAY_CONFIG
+  tags:
+    - quay-config
+
+- name: Deploy quay container
+  include_tasks: tasks/deploy.yml
+  when: QUAY_CONFIG is undefined or not QUAY_CONFIG
+  tags:
+    - quay
+
+- name: Deploy quay mirror sync container
+  include_tasks: tasks/quay-mirror.yml
+  tags:
+    - quay-worker
+
+- name: Deploy clair
+  include_tasks: tasks/clair.yml
+  when: WITH_CLAIR is defined and WITH_CLAIR
+  tags:
+    - quay-clair
