@@ -1,7 +1,7 @@
 ---
 # tasks file for quay-ansible
 - name: Login to quay.io
-  shell: podman login -u "{{ QUAY_IO_USERNAME }}" -p "{{ QUAY_IO_PASSWORD }}" "{{ QUAY_IO_REGISTRY_URL }}" 
+  command: podman login -u "{{ QUAY_IO_USERNAME }}" -p "{{ QUAY_IO_PASSWORD }}" "{{ QUAY_IO_REGISTRY_URL }}" 
   # podman_login:
   #   username: "{{ QUAY_IO_USERNAME }}"
   #   password: "{{ QUAY_IO_PASSWORD }}"
@@ -9,7 +9,7 @@
   when: QUAY_IO_USERNAME is defined
 
 - name: Login to Red Hat Registry
-  shell: podman login -u {{ UPSTREAM_REGISTRY_USERNAME }} -p {{ UPSTREAM_REGISTRY_PASSWORD }} {{ UPSTREAM_REGISTRY_URL }}
+  command: podman login -u "{{ UPSTREAM_REGISTRY_USERNAME }}" -p "{{ UPSTREAM_REGISTRY_PASSWORD }}" "{{ UPSTREAM_REGISTRY_URL }}"
   # podman_login:
   #   username: "{{ UPSTREAM_REGISTRY_USERNAME }}"
   #   password: "{{ UPSTREAM_REGISTRY_PASSWORD }}"

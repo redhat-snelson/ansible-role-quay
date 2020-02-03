@@ -34,21 +34,21 @@
     - quay-config
     - quay-worker
 
-- name: fetch database container info
-  podman_container_info:
-    name: mysql
-  register: mysql_container_info
+# - name: fetch database container info
+#   podman_container_info:
+#     name: mysql
+#   register: mysql_container_info
 
-- debug:
-    var: mysql_container_info.containers[0].NetworkSettings.IPAddress
+# - debug:
+#     var: mysql_container_info.containers[0].NetworkSettings.IPAddress
 
-- name: fetch redis container info
-  podman_container_info:
-    name: redis
-  register: redis_container_info
+# - name: fetch redis container info
+#   podman_container_info:
+#     name: redis
+#   register: redis_container_info
 
-- debug:
-    var: redis_container_info.containers[0].NetworkSettings.IPAddress
+# - debug:
+#     var: redis_container_info.containers[0].NetworkSettings.IPAddress
 
 - name: Deploy quay config container
   include_tasks: tasks/{{ CONTAINER_RUNTIME }}/config-mode.yml
