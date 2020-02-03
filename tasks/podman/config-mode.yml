@@ -1,6 +1,6 @@
 ---
 - name: Start quay in config mode
-  docker_container:
+  podman_container:
     detach: yes
     restart: no
     name: "quay-config"
@@ -31,4 +31,4 @@
 
 - name: Pause
   pause:
-    msg: Please follow the 3 previous tasks for configuration
+    prompt: Please follow the 3 previous tasks for configuration

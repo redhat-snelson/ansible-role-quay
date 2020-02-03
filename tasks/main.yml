@@ -1,27 +1,74 @@
 ---
 # tasks file for quay-ansible
+- name: gather os specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}_{{ ansible_distribution_major_version}}.yml"
+    - "{{ ansible_distribution }}.yml"
+  tags: vars
+
 - name: Login to Container Repository
-  import_tasks: tasks/login-registry.yml
+  include_tasks: tasks/{{ CONTAINER_RUNTIME }}/login-registry.yml
+
+# - name: Deploy docker to quay container host
+#   include_tasks: tasks/deploy-docker.yml
+#   vars:
+#     docker_packages:
+#       - docker
+#       - python-docker-py
+#   tags:
+#     - quay
+#     - quay-config
+#     - quay-worker
+
+- name: Configure firewall
+  include_tasks: tasks/firewall-setup.yml
+  vars:
+    ports:
+      - 443/tcp
+      - 80/tcp
+      - 8443/tcp
+    firewall_zone: public
+  tags:
+    - quay
+    - quay-config
+    - quay-worker
+
+- name: fetch database container info
+  podman_container_info:
+    name: mysql
+  register: mysql_container_info
+
+- debug:
+    var: mysql_container_info.containers[0].NetworkSettings.IPAddress
+
+- name: fetch redis container info
+  podman_container_info:
+    name: redis
+  register: redis_container_info
+
+- debug:
+    var: redis_container_info.containers[0].NetworkSettings.IPAddress
 
 - name: Deploy quay config container
-  include_tasks: tasks/config-mode.yml
+  include_tasks: tasks/{{ CONTAINER_RUNTIME }}/config-mode.yml
   when: QUAY_CONFIG is defined and QUAY_CONFIG
   tags:
     - quay-config
 
 - name: Deploy quay container
-  include_tasks: tasks/deploy.yml
+  include_tasks: tasks/{{ CONTAINER_RUNTIME }}/quay.yml
   when: QUAY_CONFIG is undefined or not QUAY_CONFIG
   tags:
     - quay
 
 - name: Deploy quay mirror sync container
-  include_tasks: tasks/quay-mirror.yml
+  include_tasks: tasks/{{ CONTAINER_RUNTIME }}/mirror.yml
   tags:
     - quay-worker
 
 - name: Deploy clair
-  include_tasks: tasks/clair.yml
+  include_tasks: tasks/{{ CONTAINER_RUNTIME }}/clair.yml
   when: WITH_CLAIR is defined and WITH_CLAIR
   tags:
     - quay-clair

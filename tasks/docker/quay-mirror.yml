@@ -13,7 +13,7 @@
 #     - quay-worker
 
 - name: Start quay repository mirror worker
-  podman_container:
+  docker_container:
     detach: yes
     restart: yes
     name: "mirroring-worker"
