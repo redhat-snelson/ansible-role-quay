@@ -5,7 +5,7 @@
 QUAY_IMAGE_VERSION: "quay.io/redhat/quay:v3.1.3"
 
 # @var POSTGRES_CONNECTION_STRING: "host={{ QUAY_ENDPOINT }} sslmode=disable dbname={{ postgresql_quay_db }} user={{ postgresql_quay_user }} password={{ postgresql_quay_user_password }} statement_timeout=60000" # The connection string built with other variables
-POSTGRES_CONNECTION_STRING: "host={{ QUAY_ENDPOINT }} sslmode=disable dbname={{ postgresql_quay_db }} user={{ postgresql_quay_user }} password={{ postgresql_quay_user_password }} statement_timeout=60000"
+POSTGRES_CONNECTION_STRING: "host={{ QUAY_ENDPOINT }} sslmode=disable dbname={{ POSTGRESQL_DATABASE }} user={{ POSTGRESQL_USER }} password={{ POSTGRESQL_PASSWORD }} statement_timeout=60000"
 
 # ### Not currently used ###
 # # postgresql_unix_socket_directories:

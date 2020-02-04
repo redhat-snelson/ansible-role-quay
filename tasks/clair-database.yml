@@ -1,0 +1,17 @@
+---
+- name: Create a new database with name {{ CLAIR_POSTGRESQL_DATABASE }}
+  postgresql_db:
+    login_host: "{{ inventory_hostname }}"
+    login_password: "{{ POSTGRESQL_ADMIN_PASSWORD }}"
+    name: "{{ CLAIR_POSTGRESQL_DATABASE }}"
+    state: present
+
+- name: "Connect to {{ CLAIR_POSTGRESQL_DATABASE }} database, create {{ CLAIR_POSTGRESQL_USER }} user, and grant access to ALL"
+  postgresql_user:
+    login_host: "{{ inventory_hostname }}"
+    login_password: "{{ POSTGRESQL_ADMIN_PASSWORD }}"
+    db: "{{ CLAIR_POSTGRESQL_DATABASE }}"
+    name: "{{ CLAIR_POSTGRESQL_USER }}"
+    password: "{{ CLAIR_POSTGRESQL_PASSWORD }}"
+    priv: "ALL"
+    expires: "infinity"

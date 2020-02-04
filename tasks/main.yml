@@ -67,6 +67,12 @@
   tags:
     - quay-worker
 
+- name: Configure clair database on PostgreSQL
+  include_tasks: tasks/clair-database.yml
+  when: WITH_CLAIR is defined and WITH_CLAIR
+  tags:
+    - quay-clair
+
 - name: Deploy clair
   include_tasks: tasks/{{ CONTAINER_RUNTIME }}/clair.yml
   when: WITH_CLAIR is defined and WITH_CLAIR
