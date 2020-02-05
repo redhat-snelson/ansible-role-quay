@@ -8,7 +8,7 @@
   tags: vars
 
 - name: Login to Container Repository
-  include_tasks: tasks/{{ CONTAINER_RUNTIME }}/login-registry.yml
+  include_tasks: tasks/{{ container_runtime }}/login-registry.yml
 
 # - name: Deploy docker to quay container host
 #   include_tasks: tasks/deploy-docker.yml
@@ -51,30 +51,30 @@
 #     var: redis_container_info.containers[0].NetworkSettings.IPAddress
 
 - name: Deploy quay config container
-  include_tasks: tasks/{{ CONTAINER_RUNTIME }}/config-mode.yml
-  when: QUAY_CONFIG is defined and QUAY_CONFIG
+  include_tasks: tasks/{{ container_runtime }}/config-mode.yml
+  when: quay_config is defined and quay_config
   tags:
     - quay-config
 
 - name: Deploy quay container
-  include_tasks: tasks/{{ CONTAINER_RUNTIME }}/quay.yml
-  when: QUAY_CONFIG is undefined or not QUAY_CONFIG
+  include_tasks: tasks/{{ container_runtime }}/quay.yml
+  when: quay_config is undefined or not quay_config
   tags:
     - quay
 
 - name: Deploy quay mirror sync container
-  include_tasks: tasks/{{ CONTAINER_RUNTIME }}/mirror.yml
+  include_tasks: tasks/{{ container_runtime }}/mirror.yml
   tags:
     - quay-worker
 
 - name: Configure clair database on PostgreSQL
   include_tasks: tasks/clair-database.yml
-  when: WITH_CLAIR is defined and WITH_CLAIR
+  when: with_clair is defined and with_clair
   tags:
     - quay-clair
 
 - name: Deploy clair
-  include_tasks: tasks/{{ CONTAINER_RUNTIME }}/clair.yml
-  when: WITH_CLAIR is defined and WITH_CLAIR
+  include_tasks: tasks/{{ container_runtime }}/clair.yml
+  when: with_clair is defined and with_clair
   tags:
     - quay-clair

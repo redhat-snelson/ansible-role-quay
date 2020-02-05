@@ -1,7 +1,7 @@
 ---
 - name: Make clair working directory
   file:
-    path: "{{ QUAY_ROOT_DIR }}/clair/"
+    path: "{{ quay_root_dir }}/clair/"
     owner:
     group:
     mode: '0644'
@@ -9,12 +9,12 @@
 
 - name: Deploy quay config
   template:
-    src: templates/clair-config.j2
-    dest: "{{ QUAY_ROOT_DIR }}/clair/config.yaml"
+    src: templates/clair.yaml
+    dest: "{{ quay_root_dir }}/clair/config.yaml"
 
 - name: Copy the quay certificate into clair
   include_tasks: clair-ssl.yml
-  when: WITH_CLAIR_SSL is defined and WITH_CLAIR_SSL
+  when: with_clair_ssl is defined and with_clair_ssl
 
 # - name: Create docker systemd path (https://github.com/mhutter/ansible-docker-systemd-service)
 
@@ -32,8 +32,8 @@
       - "6061:6061"
     image: "quay.io/redhat/clair-jwt:v3.1.3"
     volumes:
-      - "{{ QUAY_ROOT_DIR }}/clair:/clair/config:Z"
-      # - "{{ QUAY_ROOT_DIR }}/config/extra_ca_certs/ca.crt:/etc/pki/ca-trust/source/anchors/ca.crt:Z,ro"
+      - "{{ quay_root_dir }}/clair:/clair/config:Z"
+      # - "{{ quay_root_dir }}/config/extra_ca_certs/ca.crt:/etc/pki/ca-trust/source/anchors/ca.crt:Z,ro"
   when: QUAY_CLAIR_HTTP_PROXY is not defined and QUAY_CLAIR_HTTPS_PROXY is not defined
   tags:
     - postgres
@@ -53,8 +53,8 @@
       - "6061:6061"
     image: "quay.io/redhat/clair-jwt:v3.1.3"
     volumes:
-      - "{{ QUAY_ROOT_DIR }}/clair:/clair/config:Z"
-      # - "{{ QUAY_ROOT_DIR }}/config/extra_ca_certs/ca.crt:/etc/pki/ca-trust/source/anchors/ca.crt:Z"
+      - "{{ quay_root_dir }}/clair:/clair/config:Z"
+      # - "{{ quay_root_dir }}/config/extra_ca_certs/ca.crt:/etc/pki/ca-trust/source/anchors/ca.crt:Z"
   when: QUAY_CLAIR_HTTP_PROXY is defined or QUAY_CLAIR_HTTPS_PROXY is defined
   tags:
     - postgres

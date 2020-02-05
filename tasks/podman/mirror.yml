@@ -18,9 +18,9 @@
     restart: yes
     name: "mirroring-worker"
     privileged: no
-    image: "{{ QUAY_IMAGE_VERSION }}"
+    image: "{{ quay_image_version }}"
     volumes:
-      - "{{ QUAY_ROOT_DIR }}/config:/conf/stack:Z"
+      - "{{ quay_root_dir }}/config:/conf/stack:Z"
     command: "repomirror"
   tags:
     - quay-worker

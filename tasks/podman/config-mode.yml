@@ -5,21 +5,21 @@
     restart: no
     name: "quay-config"
     privileged: yes
-    published_ports: "{{ QUAY_CONFIG_PORT }}:8443"
-    image: "{{ QUAY_IMAGE_VERSION }}"
-    command: "config {{ QUAY_CONFIG_PASSWORD }}"
+    published_ports: "{{ quay_config_port }}:8443"
+    image: "{{ quay_image_version }}"
+    command: "config {{ quay_config_password }}"
   tags:
     - quay-config
 
-- name: "Go login to quay host on port {{ QUAY_CONFIG_PORT }}"
+- name: "Go login to quay host on port {{ quay_config_port }}"
   debug:
-    msg: "Login to {{ inventory_hostname }}:{{ QUAY_CONFIG_PORT }} using username quayconfig and password {{ QUAY_CONFIG_PASSWORD }}"
+    msg: "Login to {{ inventory_hostname }}:{{ quay_config_port }} using username quayconfig and password {{ quay_config_password }}"
   tags:
     - quay-config
 
 - name: "Setup configuration options in quay config"
   debug:
-    msg: "1) Select mysql database option. 2) Fill out the fields with the following data. Database Server = {{ inventory_hostname }}, Username = {{ MYSQL_USER }}, Password = {{ MYSQL_PASSWORD }}, Database Name = {{ MYSQL_DATABASE }}, SSL certificate can be left blank for testing"
+    msg: "1) Select mysql database option. 2) Fill out the fields with the following data. Database Server = {{ inventory_hostname }}, Username = {{ mysql_user }}, Password = {{ mysql_password }}, Database Name = {{ mysql_database }}, SSL certificate can be left blank for testing"
   tags:
     - quay-config
 
